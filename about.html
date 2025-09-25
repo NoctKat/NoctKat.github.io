@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | NoctKat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        .neon-text {
+            text-shadow: 0 0 5px #00f7ff, 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+        }
+        .neon-box {
+            box-shadow: 0 0 10px #00f7ff, 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+        .neon-border {
+            border: 1px solid #00f7ff;
+            box-shadow: 0 0 10px #00f7ff, inset 0 0 10px #00f7ff;
+        }
+        .glow-on-hover:hover {
+            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff;
+        }
+        .content-card {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 20, 0.7);
+        }
+        .skill-bar {
+            height: 6px;
+            background: rgba(0, 247, 255, 0.2);
+        }
+        .skill-progress {
+            height: 100%;
+            background: #00f7ff;
+            box-shadow: 0 0 10px #00f7ff;
+        }
+    </style>
+</head>
+<body class="bg-black text-white font-['Rajdhani'] overflow-x-hidden">
+    <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-80 backdrop-filter backdrop-blur-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-['Orbitron'] neon-text">NOCTKAT</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-lg font-medium hover:text-cyan-400 transition-colors glow-on-hover">HOME</a>
+                <a href="content.html" class="text-lg font-medium hover:text-cyan-400 transition-colors glow-on-hover">CONTENT</a>
+                <a href="#" class="text-lg font-medium text-cyan-400 transition-colors glow-on-hover">ABOUT</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-90 px-6 py-4">
+            <a href="index.html" class="block py-2 text-lg hover:text-cyan-400">HOME</a>
+            <a href="content.html" class="block py-2 text-lg hover:text-cyan-400">CONTENT</a>
+            <a href="#" class="block py-2 text-lg text-cyan-400">ABOUT</a>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="min-h-screen pt-32 px-4 pb-20">
+        <div class="container mx-auto">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/3" data-aos="fade-right">
+                    <div class="content-card neon-border rounded-lg p-6 mb-8">
+                        <img src="https://instagram.fmnl4-3.fna.fbcdn.net/v/t51.2885-15/66404025_2351455111643516_8435191842814394368_n.jpg?stp=dst-jpg_e35&_nc_ht=instagram.fmnl4-3.fna.fbcdn.net&_nc_cat=111&_nc_ohc=5v9Y2jKQ9X4AX9QrX5_&edm=AP_V10EBAAAA&ccb=7-5&oh=00_AfDZ4PJXWkR1oX5T9z4Qn5g4UoXxG8qQy3s5m5_5Q5Q5Q&oe=65B8C6E0&_nc_sid=2999b8" alt="NoctKat" class="w-full h-auto rounded-lg neon-box">
+                    </div>
+                    <div class="content-card neon-border rounded-lg p-6 text-center">
+                        <h3 class="text-xl font-bold mb-4">CONNECT WITH ME</h3>
+                        <div class="flex justify-center space-x-6">
+                            <a href="https://youtube.com/@NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                                <i data-feather="youtube" class="w-6 h-6"></i>
+                            </a>
+                            <a href="https://twitch.tv/NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                                <i data-feather="twitch" class="w-6 h-6"></i>
+                            </a>
+                            <a href="https://instagram.com/raiden_raven09" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                                <i data-feather="instagram" class="w-6 h-6"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-2/3" data-aos="fade-left">
+                    <h1 class="text-4xl md:text-5xl font-bold font-['Orbitron'] neon-text mb-6">ABOUT NOCTKAT</h1>
+                    <p class="text-lg mb-6">I'm a multi-talented content creator with black belts in both karate and kickboxing, an AA class IPSC shooter (3rd place national level), and award-winning cosplayer (2nd place best costume). I specialize in martial arts, firearms, cosplay, gaming, and filmmaking, creating engaging content across multiple platforms.</p>
+                    
+                    <div class="content-card neon-border rounded-lg p-6 mb-8">
+                        <h2 class="text-2xl font-bold font-['Orbitron'] neon-text mb-4">MY SKILLS</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Karate (Blackbelt)</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 95%"></div>
+                                </div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Kickboxing (Blackbelt)</span>
+                                    <span>93%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 93%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>IPSC Shooting (AA Class)</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Cosplay Crafting (Award Winner)</span>
+                                    <span>88%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Video Production</span>
+                                    <span>75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Live Streaming</span>
+                                    <span>70%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="content-card neon-border rounded-lg p-6">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <i data-feather="award" class="mr-2 text-cyan-400"></i> Martial Arts
+                            </h3>
+                            <p class="text-gray-300">With years of training in various disciplines, I create tutorials and demonstrations to share my knowledge and passion for martial arts.</p>
+                        </div>
+                        <div class="content-card neon-border rounded-lg p-6">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <i data-feather="target" class="mr-2 text-cyan-400"></i> Firearms
+                            </h3>
+                            <p class="text-gray-300">My content covers safe handling, maintenance, and demonstration of firearms, combining technical knowledge with practical applications.</p>
+                        </div>
+                        <div class="content-card neon-border rounded-lg p-6">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <i data-feather="feather" class="mr-2 text-cyan-400"></i> Cosplay
+                            </h3>
+                            <p class="text-gray-300">From crafting to performance, my cosplay work brings characters to life with attention to detail and creative interpretation.</p>
+                        </div>
+                        <div class="content-card neon-border rounded-lg p-6">
+                            <h3 class="text-xl font-bold mb-3 flex items-center">
+                                <i data-feather="film" class="mr-2 text-cyan-400"></i> Filmmaking
+                            </h3>
+                            <p class="text-gray-300">Creating short films allows me to combine all my skills into cinematic experiences that tell compelling stories.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-80 py-8 px-4">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-['Orbitron'] neon-text">NOCTKAT</h3>
+                    <p class="text-gray-400">© 2023 All Rights Reserved</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://youtube.com/@NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i data-feather="youtube"></i>
+                    </a>
+                    <a href="https://twitch.tv/NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i data-feather="twitch"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        VANTA.WAVES({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x00f7ff,
+            shininess: 50.00,
+            waveHeight: 20.00,
+            waveSpeed: 0.50,
+            zoom: 0.8
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            feather.replace();
+        });
+        
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        feather.replace();
+    </script>
+</body>
+</html>
