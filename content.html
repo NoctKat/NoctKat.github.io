@@ -69,8 +69,32 @@
     <section class="min-h-screen pt-32 px-4 pb-20">
         <div class="container mx-auto">
             <h1 class="text-4xl md:text-5xl font-bold font-['Orbitron'] neon-text mb-12 text-center" data-aos="fade-up">MY CONTENT</h1>
-            
-            <!-- Category Tabs -->
+            <!-- Live Stream Banner -->
+            <div class="relative mb-12 neon-border rounded-lg overflow-hidden" data-aos="fade-up">
+                <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10 flex items-center pl-12">
+                    <div>
+                        <h2 class="text-3xl font-bold font-['Orbitron'] neon-text mb-2">WATCH ME LIVE NOW</h2>
+                        <p class="text-xl mb-4">Join my Twitch stream for live martial arts, gaming and more!</p>
+                        <div class="flex gap-4">
+                            <a href="https://www.twitch.tv/noctkat" target="_blank" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-full font-bold transition-colors inline-block">
+                                <i data-feather="tv" class="inline mr-2"></i> Watch Live
+                            </a>
+                            <a href="https://www.twitch.tv/noctkat/chat" target="_blank" class="px-6 py-2 bg-purple-500 hover:bg-purple-600 rounded-full font-bold transition-colors inline-block">
+                                <i data-feather="message-square" class="inline mr-2"></i> Join Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative pt-[56.25%]">
+                    <iframe 
+                        class="absolute top-0 left-0 w-full h-full" 
+                        src="https://player.twitch.tv/?channel=noctkat&parent=${window.location.hostname}&autoplay=true"
+                        frameborder="0" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+<!-- Category Tabs -->
             <div class="flex flex-wrap justify-center gap-4 mb-12" data-aos="fade-up">
                 <button class="category-tab active px-6 py-2 neon-border rounded-full" data-category="all">All</button>
                 <button class="category-tab px-6 py-2 neon-border rounded-full" data-category="martial-arts">Martial Arts</button>
@@ -78,8 +102,7 @@
                 <button class="category-tab px-6 py-2 neon-border rounded-full" data-category="gaming">Gaming</button>
                 <button class="category-tab px-6 py-2 neon-border rounded-full" data-category="films">Short Films</button>
             </div>
-            
-            <!-- Content Grid -->
+<!-- Content Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Martial Arts 1 -->
                 <div class="content-card neon-border rounded-lg overflow-hidden" data-category="martial-arts" data-aos="fade-up">
@@ -262,14 +285,11 @@
             backgroundColor: 0x0,
             size: 0.8
         });
-
-        // Twitch embed parent domain
-        const twitchIframe = document.querySelector('iframe[src*="twitch.tv"]');
-        if (twitchIframe) {
-            twitchIframe.src = `https://player.twitch.tv/?channel=noctkat&parent=${window.location.hostname}`;
-        }
-        
-        // Mobile menu toggle
+        // Update all Twitch embeds with correct parent
+        document.querySelectorAll('iframe[src*="twitch.tv"]').forEach(iframe => {
+            iframe.src = `https://player.twitch.tv/?channel=noctkat&parent=${window.location.hostname}&autoplay=true`;
+        });
+// Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
