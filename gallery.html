@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | NoctKat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        #image-modal {
+            transition: opacity 0.3s ease;
+        }
+        
+        .grid-item {
+            cursor: pointer;
+        }
+.neon-text {
+            text-shadow: 0 0 5px #00f7ff, 0 0 10px #00f7ff, 0 0 20px #00f7ff, 0 0 5px #9d00ff, 0 0 10px #9d00ff;
+        }
+        .neon-box {
+            box-shadow: 0 0 10px #00f7ff, 0 0 20px rgba(0, 247, 255, 0.5), 0 0 10px #9d00ff, 0 0 20px rgba(157, 0, 255, 0.5);
+        }
+        .neon-border {
+            border: 1px solid #00f7ff;
+            box-shadow: 0 0 10px #00f7ff, inset 0 0 10px #00f7ff, 0 0 10px #9d00ff, inset 0 0 10px #9d00ff;
+        }
+        .glow-on-hover:hover {
+            text-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff, 0 0 10px #9d00ff;
+        }
+        .content-card {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 20, 0.7);
+        }
+        .synthwave-bg {
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        }
+        .cityscape {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        .building {
+            position: absolute;
+            bottom: 0;
+            background: linear-gradient(to top, #1a1a2e, #16213e);
+            border-top: 2px solid #00f7ff;
+        }
+        .window {
+            position: absolute;
+            background: #f8f32b;
+            box-shadow: 0 0 5px #f8f32b;
+        }
+        .road {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: #1a1a2e;
+        }
+        .road-line {
+            position: absolute;
+            height: 4px;
+            width: 60px;
+            background: #00f7ff;
+            box-shadow: 0 0 5px #00f7ff;
+        }
+        .car {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: #ff2d75;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ff2d75;
+        }
+        .car:before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            width: 100%;
+            height: 5px;
+            background: #ff2d75;
+            border-radius: 5px 5px 0 0;
+        }
+        .sun {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f8f32b;
+            box-shadow: 0 0 30px #f8f32b;
+        }
+        .grid-item {
+            transition: all 0.3s ease;
+        }
+        .grid-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-black text-white font-['Rajdhani'] overflow-x-hidden">
+    <div id="threejs-bg" class="fixed inset-0 -z-10"></div>
+<!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-80 backdrop-filter backdrop-blur-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-['Orbitron'] neon-text">NOCTKAT</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-lg font-medium hover:text-cyan-400 transition-colors glow-on-hover">HOME</a>
+                <a href="content.html" class="text-lg font-medium hover:text-cyan-400 transition-colors glow-on-hover">CONTENT</a>
+                <a href="about.html" class="text-lg font-medium hover:text-cyan-400 transition-colors glow-on-hover">ABOUT</a>
+                <a href="#" class="text-lg font-medium text-cyan-400 transition-colors glow-on-hover">GALLERY</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <i data-feather="menu"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-90 px-6 py-4">
+            <a href="index.html" class="block py-2 text-lg hover:text-cyan-400">HOME</a>
+            <a href="content.html" class="block py-2 text-lg hover:text-cyan-400">CONTENT</a>
+            <a href="about.html" class="block py-2 text-lg hover:text-cyan-400">ABOUT</a>
+            <a href="#" class="block py-2 text-lg text-cyan-400">GALLERY</a>
+        </div>
+    </nav>
+
+    <!-- Gallery Section -->
+    <section class="min-h-screen pt-32 px-4 pb-20">
+        <div class="container mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold font-['Orbitron'] neon-text mb-6 text-center">GALLERY</h1>
+            
+            <!-- Category Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="category-filter active px-6 py-2 neon-border rounded-full" data-category="my-photos">My Photos</button>
+                <button class="category-filter px-6 py-2 neon-border rounded-full" data-category="fans-photos">With Fans</button>
+                <button class="category-filter px-6 py-2 neon-border rounded-full" data-category="collab-photos">Collaborations</button>
+            </div>
+
+            <!-- Photo Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- My Photo 1 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SnapInsta.to_468032277_550410604539728_2949531666354629793_n.jpg" alt="My Photo" class="w-full h-64 object-cover">
+</div>
+                <!-- My Photo 2 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SnapInsta.to_468036914_884178300508839_8737045471905340858_n.jpg" alt="My Photo" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">My Photo</h3>
+                    </div>
+</div>
+                <!-- My Photo 3 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SnapInsta.to_498112662_18274480843281102_1272704257535639877_n.jpg" alt="My Photo" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">My Photo</h3>
+                    </div>
+</div>
+                <!-- My Photo 4 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/soo-what-yaall-think-of-my-very-realistic-and-very-v0-h7t3cpbg1cag1.webp" alt="My Photo" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">My Photo</h3>
+                    </div>
+</div>
+                <!-- My Photo 5 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/soo-what-yaall-think-of-my-very-realistic-and-very-v0-33li8y5n1cag1.webp" alt="My Photo" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">My Photo</h3>
+                    </div>
+</div>
+                <!-- My Photo 6 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+<img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SnapInsta.to_498262033_18274480879281102_713234191457721130_n.jpg" alt="My Photo" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold mb-2">My Photo</h3>
+                    </div>
+</div>
+                <!-- My Photo 7 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="my-photos" style="display: block;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SnapInsta.to_498157597_18274480852281102_8968646303695594236_n.jpg" alt="My Photo" class="w-full h-64 object-cover">
+</div>
+                <!-- Fan Photos 1 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184315.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 2 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184322.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 3 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184330.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 4 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184337.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 5 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184241.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 6 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184234.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 7 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184229.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 8 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184218.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 9 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184148.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 10 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184156.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+                <!-- Fan Photos 11 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184206.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 12 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184914.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 13 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184921.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 14 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184933.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 15 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184940.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 16 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184945.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 17 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184951.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 18 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20184956.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 19 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20185003.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 20 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20185009.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 21 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20185015.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 22 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20185029.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Fan Photos 23 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="fans-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/Screenshot%202026-01-21%20185041.png" alt="With Fan" class="w-full h-64 object-cover">
+</div>
+<!-- Collab Photos 1 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_441131572_3701413523449815_6763449124691525423_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 2 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_441126049_949831346626973_6586814323130333139_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 3 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_441111976_848643677085603_6425486519764673609_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 4 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_441104674_951538160097288_7440295039471440843_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 5 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_440313017_316817764562243_7283856049267357406_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 6 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_440394595_422205930549974_7816893842447534634_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 7 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_440441904_452459944122219_8569132125819359669_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 8 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_441100056_1562706397642046_1707077090373370255_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 9 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_440272075_3360501974095993_2401232961949161418_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 10 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_333643461_115791174656520_3081487579003031394_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 11 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_333614728_189240143723558_2376251933665469242_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+
+                <!-- Collab Photos 12 -->
+                <div class="content-card neon-border rounded-lg overflow-hidden grid-item" data-category="collab-photos" style="display: none;">
+                    <img src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/images/SaveClip.App_332991584_1265228621062425_6648333350582310332_n.jpg" alt="Collaboration" class="w-full h-64 object-cover">
+</div>
+</div>
+
+</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-80 py-8 px-4">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-['Orbitron'] neon-text">NOCTKAT</h3>
+                    <p class="text-gray-400">© 2023 All Rights Reserved</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://youtube.com/@NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i data-feather="youtube"></i>
+                    </a>
+                    <a href="https://twitch.tv/NoctKat" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i data-feather="twitch"></i>
+                    </a>
+                    <a href="https://instagram.com/raiden_raven09" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i data-feather="instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Fullscreen Image Modal -->
+    <div id="image-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90">
+        <div class="relative max-w-4xl w-full h-full flex items-center justify-center">
+            <button id="close-modal" class="absolute top-4 right-4 text-white text-4xl hover:text-cyan-400">&times;</button>
+            <img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain">
+        </div>
+    </div>
+
+    <script>
+        // Fullscreen image viewer
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-image');
+        const closeBtn = document.getElementById('close-modal');
+        
+        document.querySelectorAll('.grid-item img').forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.remove('hidden');
+                modalImg.src = this.src;
+            });
+        });
+        
+        closeBtn.addEventListener('click', function() {
+            modal.classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside image
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // Category filter
+document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-filter').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn === this) btn.classList.add('active');
+                });
+                
+                const category = this.dataset.category;
+                document.querySelectorAll('.grid-item').forEach(item => {
+                    item.style.display = item.dataset.category === category ? 'block' : 'none';
+                });
+            });
+        });
+        // Three.js 3D Background
+        let scene, camera, renderer, particles;
+        
+        function initThreeJS() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                75, 
+                window.innerWidth / window.innerHeight, 
+                0.1, 
+                1000
+            );
+            camera.position.z = 30;
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('threejs-bg').appendChild(renderer.domElement);
+            
+            // Particle System
+            const particleCount = 1500;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            // Create colorful particles
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 200;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
+                
+                // Neon colors (cyan and purple)
+                if (Math.random() > 0.5) {
+                    colors[i * 3] = 0;     // R
+                    colors[i * 3 + 1] = 0.97; // G (cyan)
+                    colors[i * 3 + 2] = 1;   // B
+                } else {
+                    colors[i * 3] = 0.62;   // R (purple)
+                    colors[i * 3 + 1] = 0;   // G
+                    colors[i * 3 + 2] = 1;   // B
+                }
+            }
+            
+            particlesGeometry.setAttribute(
+                'position',
+                new THREE.BufferAttribute(positions, 3)
+            );
+            particlesGeometry.setAttribute(
+                'color',
+                new THREE.BufferAttribute(colors, 3)
+            );
+            
+            // Particle Material
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.5,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            
+            // Create particle system
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+            
+            // Mouse movement effect
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - window.innerWidth / 2) / 50;
+                mouseY = (event.clientY - window.innerHeight / 2) / 50;
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate particles
+                particles.rotation.x += 0.0005;
+                particles.rotation.y += 0.001;
+                
+                // Move camera based on mouse position
+                camera.position.x += (mouseX - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Initialize the 3D background
+        initThreeJS();
+// Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            feather.replace();
+        });
+        
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        feather.replace();
+    </script>
+</body>
+</html>
