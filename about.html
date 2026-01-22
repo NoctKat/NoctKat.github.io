@@ -234,25 +234,29 @@
         // Audio controls
         const audio = document.getElementById('bg-audio');
         const audioToggle = document.getElementById('audio-toggle');
-        let isAudioPlaying = false;
-
-        // Try to autoplay (may be blocked by browser)
+        let isAudioPlaying = localStorage.getItem('audioPlaying') === 'true';
+        
+        // Set initial state
         audio.volume = 0.5;
-        const playPromise = audio.play();
-
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                isAudioPlaying = true;
-            }).catch(error => {
+        if (isAudioPlaying) {
+            audio.play().catch(e => {
                 isAudioPlaying = false;
-                feather.replace();
+                localStorage.setItem('audioPlaying', 'false');
             });
+            audioToggle.innerHTML = '<i data-feather="volume-2"></i>';
+        } else {
+            audio.pause();
+            audioToggle.innerHTML = '<i data-feather="volume-x"></i>';
         }
 
         audioToggle.addEventListener('click', () => {
             isAudioPlaying = !isAudioPlaying;
+            localStorage.setItem('audioPlaying', isAudioPlaying);
             if (isAudioPlaying) {
-                audio.play();
+                audio.play().catch(e => {
+                    isAudioPlaying = false;
+                    localStorage.setItem('audioPlaying', 'false');
+                });
                 audioToggle.innerHTML = '<i data-feather="volume-2"></i>';
             } else {
                 audio.pause();
@@ -260,8 +264,7 @@
             }
             feather.replace();
         });
-
-        VANTA.WAVES({
+VANTA.WAVES({
 el: "#vanta-bg",
             mouseControls: true,
             touchControls: true,
