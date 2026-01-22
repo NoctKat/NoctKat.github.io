@@ -138,10 +138,50 @@
             </div>
         </div>
     </footer>
+    <!-- Audio Player -->
+    <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+        <button id="audio-toggle" class="p-2 bg-black bg-opacity-70 rounded-full text-white hover:text-cyan-400">
+            <i data-feather="volume-2"></i>
+        </button>
+        <span class="text-xs text-white bg-black bg-opacity-70 px-2 py-1 rounded">seany - shimmer</span>
+    </div>
+    <audio id="bg-audio" loop>
+        <source src="https://huggingface.co/spaces/NoctKat/idk/resolve/main/audio/seany_-_Shimmer_(official_audio)_128k.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
+        // Audio controls
+        const audio = document.getElementById('bg-audio');
+        const audioToggle = document.getElementById('audio-toggle');
+        let isAudioPlaying = false;
+
+        // Try to autoplay (may be blocked by browser)
+        audio.volume = 0.5;
+        const playPromise = audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                isAudioPlaying = true;
+            }).catch(error => {
+                isAudioPlaying = false;
+                feather.replace();
+            });
+        }
+
+        audioToggle.addEventListener('click', () => {
+            isAudioPlaying = !isAudioPlaying;
+            if (isAudioPlaying) {
+                audio.play();
+                audioToggle.innerHTML = '<i data-feather="volume-2"></i>';
+            } else {
+                audio.pause();
+                audioToggle.innerHTML = '<i data-feather="volume-x"></i>';
+            }
+            feather.replace();
+        });
+
         VANTA.NET({
-            el: "#vanta-bg",
+el: "#vanta-bg",
             mouseControls: true,
             touchControls: true,
             gyroControls: false,
